@@ -4,6 +4,7 @@
 import json
 from models.base_model import BaseModel
 
+
 class FileStorage:
     """Serializes instances to JSON and deserializes JSON to instances"""
 
@@ -22,7 +23,10 @@ class FileStorage:
     def save(self):
         """Serializes __objects to JSON file"""
         with open(self.__file_path, 'w') as f:
-            json.dump({key: obj.to_dict() for key, obj in self.__objects.items()}, f)
+            json.dump(
+                {key: obj.to_dict() for key, obj in self.__objects.items()},
+                f
+            )
 
     def reload(self):
         """Deserializes JSON file to __objects if the file exists"""
@@ -31,6 +35,7 @@ class FileStorage:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     cls_name = value["__class__"]
-                    self.__objects[key] = eval(cls_name)(**value)
+                    if cls_name == "BaseModel":
+                        self.__objects[key] = BaseModel(**value)
         except FileNotFoundError:
             pass
