@@ -7,8 +7,8 @@ from models.engine.file_storage import FileStorage
 
 # Dictionary to hold all model classes
 all_classes = {
-            'BaseModel': BaseModel,
-            }
+    'BaseModel': BaseModel,
+}
 
 # Create an instance of FileStorage and reload
 storage = FileStorage()

@@ -27,21 +27,26 @@ class FileStorage:
         """
         Saves the current objects to the JSON file.
         """
-        with open(FileStorage.__file_path, 'w') as f:
+        with open(self.__file_path, 'w') as f:
             json.dump({
-                key: obj.to_dict() for key, obj in FileStorage.__objects.items()
+                key: obj.to_dict()
+                for key, obj in FileStorage.__objects.items()
             }, f)
 
     def reload(self):
-        """Deserializes the JSON file to __objects
-        (only if the JSON file (__file_path) exists).
         """
-        if os.path.exists(FileStorage.__file_path):
-            if os.path.getsize(FileStorage.__file_path) > 0:
-                with open(FileStorage.__file_path, 'r') as f:
+        Deserializes the JSON file to __objects if the file exists.
+        """
+        if os.path.exists(self.__file_path):
+            try:
+                with open(self.__file_path, 'r') as f:
                     objects = json.load(f)
                     for key, value in objects.items():
                         cls_name = value['__class__']
                         cls = all_classes.get(cls_name)
                         if cls:
                             FileStorage.__objects[key] = cls(**value)
+            except json.JSONDecodeError:
+                # Reset file content if it's invalid
+                with open(self.__file_path, 'w') as f:
+                    f.write('{}')
