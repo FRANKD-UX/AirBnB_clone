@@ -1,27 +1,39 @@
 #!/usr/bin/python3
-"""Module for the AirBnB clone command interpreter"""
+"""Entry point of the command interpreter"""
 
 import cmd
 
 
 class HBNBCommand(cmd.Cmd):
-    """Command interpreter for AirBnB clone"""
+    """Command interpreter for the AirBnB clone project"""
 
-    prompt = "(hbnb) "  # Sets the command prompt
+    prompt = "(hbnb) "
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
 
     def do_EOF(self, arg):
-        """EOF command to exit the program"""
+        """Exit the program with EOF (Ctrl+D)"""
         print()
         return True
 
     def emptyline(self):
-        """Overrides the default behavior to do nothing on empty input"""
+        """Do nothing on empty input"""
         pass
 
+    def do_help(self, arg):
+        """List available commands with "help" or
+        detailed help for a command"""
+        return super().do_help(arg)
 
-if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+
+if __name__ == "__main__":
+    import sys
+
+    if sys.stdin.isatty():
+        # Interactive mode
+        HBNBCommand().cmdloop()
+    else:
+        # Non-interactive mode
+        HBNBCommand(stdin=sys.stdin).cmdloop()
