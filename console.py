@@ -5,12 +5,15 @@ from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
+    """
+    Command interpreter class for managing AirBnB objects.
+    """
     prompt = '(hbnb) '
 
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel,
-        saves it (to the JSON file), and prints the id.
+        Create a new instance of BaseModel,
+        save it to JSON file, and print the id.
         Usage: create <class name>
         """
         args = arg.split()
@@ -27,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """
-        Prints the string representation of an
+        Print the string representation of an
         instance based on the class name and id.
         Usage: show <class name> <id>
         """
@@ -52,8 +55,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """
-        Deletes an instance based on the class name and id
-        (save the change into the JSON file).
+        Delete an instance based on the class name and
+        id, save the change to the JSON file.
         Usage: destroy <class name> <id>
         """
         args = arg.split()
@@ -78,8 +81,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """
-        Prints all string representation of all instances
-        based or not on the class name.
+        Print all string representations of all
+        instances based on or not on the class name.
         Usage: all <class name> or all
         """
         args = arg.split()
@@ -99,8 +102,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Updates an instance based on the class
-        name and id by adding or updating an attribute.
+        Update an instance based on the class name
+        and id by adding or updating an attribute.
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
         args = arg.split()
