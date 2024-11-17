@@ -1,55 +1,48 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/python3
+"""
+FileStorage module for serializing and deserializing objects
+"""
 import json
-import os
+from os.path import exists
 from models.base_model import BaseModel
-from datetime import datetime
 
 
 class FileStorage:
     """
-    Handles saving and loading data from a JSON file.
+    Serializes instances to a JSON file and deserializes JSON file to instances
     """
-
-    __file_path = 'file.json'
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
         """
-        Return the dictionary of all objects.
+        Returns the dictionary __objects
         """
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """
-        Add a new object to the objects dictionary.
+        Sets in __objects the obj with key <obj class name>.id
         """
         key = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[key] = obj
+        self.__objects[key] = obj
 
     def save(self):
         """
-        Save all objects to the file.
+        Serializes __objects to the JSON file at __file_path
         """
-        with open(FileStorage.__file_path, 'w') as f:
-            json.dump({key: obj.to_dict()
-                      for key, obj in FileStorage.__objects.items()}, f)
+        with open(self.__file_path, "w") as file:
+            json.dump({k: v.to_dict()
+                      for k, v in self.__objects.items()}, file)
 
     def reload(self):
         """
-        Load all objects from the file if it exists and is not empty.
+        Deserializes the JSON file to __objects, if it exists
         """
-        if os.path.exists(FileStorage.__file_path) and os.path.getsize(FileStorage.__file_path) > 0:
-            try:
-                with open(FileStorage.__file_path, 'r') as f:
-                    objs = json.load(f)
-                    for key, value in objs.items():
-                        class_name = value["__class__"]
-                        if class_name == "BaseModel":
-                            obj = BaseModel(**value)
-                        # Add other model types here if necessary
-                        FileStorage.__objects[key] = obj
-            except json.JSONDecodeError:
-                print("Error: Failed to decode JSON from file.")
-        else:
-            print(f"{FileStorage.__file_path} is empty or does not exist.")
+        if exists(self.__file_path):
+            with open(self.__file_path, "r") as file:
+                obj_dict = json.load(file)
+                for key, value in obj_dict.items():
+                    cls_name = value["__class__"]
+                    if cls_name == "BaseModel":
+                        self.__objects[key] = BaseModel(**value)

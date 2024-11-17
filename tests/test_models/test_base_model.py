@@ -28,7 +28,8 @@ class TestBaseModel(unittest.TestCase):
 
     def test_to_dict_creates_dict_with_correct_keys(self):
         """
-        Test that the to_dict method creates a dictionary with the correct keys.
+        Test that the to_dict method creates
+        a dictionary with the correct keys.
         """
         dict_rep = self.model.to_dict()
         self.assertEqual(dict_rep['__class__'], 'BaseModel')

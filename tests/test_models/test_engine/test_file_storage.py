@@ -16,7 +16,8 @@ all_classes = {
 
 class FileStorage:
     """
-    Serializes instances to a JSON file and deserializes JSON file to instances.
+    Serializes instances to a JSON file
+    and deserializes JSON file to instances.
     """
     __file_path = 'file.json'
     __objects = {}
@@ -61,6 +62,7 @@ class FileStorage:
                                 FileStorage.__objects[key] = cls(**value)
                 except json.JSONDecodeError:
                     print(
-                        f"Warning: Failed to decode {FileStorage.__file_path}. "
+                        f"Warning: Failed to decode
+                        {FileStorage.__file_path}. "
                         "The file might be corrupted or invalid."
                     )
