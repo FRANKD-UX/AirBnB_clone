@@ -3,6 +3,7 @@
 
 import cmd
 
+
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for AirBnB clone"""
 
@@ -20,6 +21,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Overrides the default behavior to do nothing on empty input"""
         pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
