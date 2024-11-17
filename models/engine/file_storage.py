@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import json
 import os
 from models.base_model import BaseModel
@@ -36,16 +37,19 @@ class FileStorage:
 
     def reload(self):
         """
-        Load all objects from the file if it exists.
+        Load all objects from the file if it exists and is not empty.
         """
-        try:
-            with open(FileStorage.__file_path, 'r') as f:
-                objs = json.load(f)
-                for key, value in objs.items():
-                    class_name = value["__class__"]
-                    if class_name == "BaseModel":
-                        obj = BaseModel(**value)
-                    # Add other model types here if necessary
-                    FileStorage.__objects[key] = obj
-        except FileNotFoundError:
-            pass
+        if os.path.exists(FileStorage.__file_path) and os.path.getsize(FileStorage.__file_path) > 0:
+            try:
+                with open(FileStorage.__file_path, 'r') as f:
+                    objs = json.load(f)
+                    for key, value in objs.items():
+                        class_name = value["__class__"]
+                        if class_name == "BaseModel":
+                            obj = BaseModel(**value)
+                        # Add other model types here if necessary
+                        FileStorage.__objects[key] = obj
+            except json.JSONDecodeError:
+                print("Error: Failed to decode JSON from file.")
+        else:
+            print(f"{FileStorage.__file_path} is empty or does not exist.")
