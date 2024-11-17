@@ -1,8 +1,9 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
 import unittest
 from models.base_model import BaseModel
 from datetime import datetime
+
 
 class TestBaseModel(unittest.TestCase):
     """
@@ -42,6 +43,6 @@ class TestBaseModel(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.model.created_at = "invalid_type"
 
+
 if __name__ == '__main__':
     unittest.main()
-
