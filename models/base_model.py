@@ -1,44 +1,52 @@
 #!/usr/bin/env python3
-
-import uuid
+from uuid import uuid4
 from datetime import datetime
+import models
 
 
 class BaseModel:
+    """
+    Base class for all models in this project.
+    Handles id and datetime management.
+    """
     def __init__(self, *args, **kwargs):
-        # If kwargs is provided, initialize from it
+        """
+        Initialize a new BaseModel instance.
+
+        Args:
+            *args: Non-keyword arguments.
+            **kwargs: Keyword arguments for custom initialization.
+        """
         if kwargs:
             for key, value in kwargs.items():
-                if key != "__class__":
+                if key != '__class__':
                     setattr(self, key, value)
-            self.updated_at = datetime.strptime(
-                kwargs['updated_at'], "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            self.created_at = datetime.strptime(
-                kwargs['created_at'], "%Y-%m-%dT%H:%M:%S.%f"
-            )
         else:
-            # If no kwargs, create a new instance
-            self.id = str(uuid.uuid4())
+            self.id = str(uuid4())  # Generates a unique ID
             self.created_at = datetime.now()
             self.updated_at = self.created_at
-            self.save()
+            models.storage.new(self)  # Add instance to storage
 
     def __str__(self):
-        return f"[{self.__class__.__name__}] ({self.id}) {self.to_dict()}"
+        """
+        Return the string representation of the BaseModel instance.
+        """
+        return "[{}] ({}) {}"
+        .format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
-        """Save the instance to storage"""
-        from models import storage  # Import storage inside
-        # the method to avoid circular import
+        """
+        Update the updated_at attribute with the current datetime.
+        """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
-        """Return a dictionary representation of the object"""
-        return {
-            'id': self.id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
-            '__class__': self.__class__.__name__
-        }
+        """
+        Return a dictionary representation of the BaseModel instance.
+        """
+        dict_rep = self.__dict__.copy()
+        dict_rep['__class__'] = self.__class__.__name__
+        dict_rep['created_at'] = self.created_at.isoformat()
+        dict_rep['updated_at'] = self.updated_at.isoformat()
+        return dict_rep
