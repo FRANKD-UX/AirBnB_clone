@@ -32,12 +32,13 @@ class FileStorage:
 
     def reload(self):
         """
-        Reloads objects from the JSON file.
+        Deserializes the JSON file to __objects
+        (only if the JSON file (__file_path) exists).
         """
-        try:
-            if os.path.exists(FileStorage.__file_path)
-            and os.stat(FileStorage.__file_path).st_size != 0:
-                with open(FileStorage.__file_path, 'r') as f:
-                    FileStorage.__objects = json.load(f)
-        except json.JSONDecodeError:
-            FileStorage.__objects = {}
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, 'r') as f:
+                objects = json.load(f)
+                for key, value in objects.items():
+                    cls_name = value['__class__']
+                    cls = globals()[cls_name]
+                    FileStorage.__objects[key] = cls(**value)
