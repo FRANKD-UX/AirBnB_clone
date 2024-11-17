@@ -9,5 +9,5 @@ The command interpreter mimics a shell environment but is tailored for managing 
 ### How to Start the Command Interpreter
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://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@github.com/FRANKD-UX/sorting_algorithms.git
-
+   git clone https://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@github.com/FRANKD-UX/sorting
+   _algorithms.git
