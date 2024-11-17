@@ -1,9 +1,16 @@
 #!/usr/bin/python3
-"""Module for command interpreter"""
+"""Command interpreter for the AirBnB project"""
 
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User  # Import User class
+
+# Dictionary of supported classes
+classes = {
+    "BaseModel": BaseModel,
+    "User": User
+}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -23,21 +30,15 @@ class HBNBCommand(cmd.Cmd):
         """Override the default behavior for empty lines"""
         pass
 
-    def do_help(self, arg):
-        """Override the help command to display help message"""
-        print("This is the help command for the HBNB command interpreter.")
-
     def do_create(self, arg):
-        """Creates a new instance of BaseModel, saves it and prints the id"""
+        """Creates a new instance of a class, saves it and prints the id"""
         if not arg:
             print("** class name missing **")
             return
-        try:
-            class_name = globals()[arg]
-        except KeyError:
+        if arg not in classes:
             print("** class doesn't exist **")
             return
-        instance = class_name()
+        instance = classes[arg]()
         instance.save()
         print(instance.id)
 
@@ -48,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         class_name = args[0]
-        if class_name not in globals():
+        if class_name not in classes:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
@@ -69,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         class_name = args[0]
-        if class_name not in globals():
+        if class_name not in classes:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
@@ -84,8 +85,8 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, arg):
-        """Prints all string representation of all instances"""
-        if arg and arg not in globals():
+        """Prints all string representations of all instances"""
+        if arg and arg not in classes:
             print("** class doesn't exist **")
             return
         all_instances = []
@@ -101,7 +102,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         class_name = args[0]
-        if class_name not in globals():
+        if class_name not in classes:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
@@ -122,18 +123,15 @@ class HBNBCommand(cmd.Cmd):
             return
         attribute_value = args[3]
 
-        # Cast the attribute value to the correct type
-        if isinstance(getattr(instance, attribute_name), str):
+        # Cast attribute value to correct type
+        if hasattr(instance, attribute_name):
+            attr_type = type(getattr(instance, attribute_name))
+            setattr(instance, attribute_name, attr_type(attribute_value))
+        else:
             setattr(instance, attribute_name, attribute_value)
-        elif isinstance(getattr(instance, attribute_name), int):
-            setattr(instance, attribute_name, int(attribute_value))
-        elif isinstance(getattr(instance, attribute_name), float):
-            setattr(instance, attribute_name, float(attribute_value))
 
         instance.save()
 
 
 if __name__ == '__main__':
-    """Start the command interpreter
-    """
     HBNBCommand().cmdloop()
