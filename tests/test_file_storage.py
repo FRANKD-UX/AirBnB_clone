@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 import unittest
 from models.engine.file_storage import FileStorage
+from models.amenity import Amenity
 
 
 class TestFileStorage(unittest.TestCase):
     def test_save_and_reload(self):
         storage = FileStorage()
-        obj = SomeObject()  # Replace with an actual object
+        obj = Amenity()  # Create an Amenity object
         storage.new(obj)
         storage.save()
 
