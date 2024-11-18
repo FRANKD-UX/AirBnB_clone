@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from models.amenity import Amenity
-mport unittest
+import unittest
 
 
 class TestAmenity(unittest.TestCase):
