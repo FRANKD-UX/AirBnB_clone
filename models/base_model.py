@@ -36,7 +36,8 @@ class BaseModel:
         return obj_dict
 
     def __setattr__(self, name, value):
-        """Ensure 'created_at' and 'updated_at' attributes are datetime objects"""
+        """Ensure 'created_at' and 'updated_at' attributes
+        are datetime objects"""
         if name == "created_at" or name == "updated_at":
             if not isinstance(value, datetime):
                 raise TypeError(f"{name} must be a datetime object")
