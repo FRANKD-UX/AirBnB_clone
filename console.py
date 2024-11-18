@@ -95,6 +95,30 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
+    def do_all(self, arg):
+        """Retrieves all instances of a class"""
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
+        if args[0] not in ["State", "City", "Place", "Amenity", "Review"]:
+            print("** class doesn't exist **")
+            return
+
+        class_name = args[0]
+        all_instances = storage.all()
+        instances_of_class = [
+            str(obj)
+            for key, obj
+            in all_instances.items()
+            if key.startswith(class_name)
+        ]
+
+        if instances_of_class:
+            print("[" + ", ".join(instances_of_class) + "]")
+        else:
+            print("** no instances found **")
+
     def do_quit(self, arg):
         """Exits the program"""
         return True
